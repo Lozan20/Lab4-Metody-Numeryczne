@@ -1,20 +1,62 @@
-﻿// Lab4-Metody-Numeryczne.cpp : Ten plik zawiera funkcję „main”. W nim rozpoczyna się i kończy wykonywanie programu.
-//
+﻿#include <iostream>
+#include<iomanip>
 
-#include <iostream>
+#define E 2.71828182846
+
+
+double f(double x, double y)
+{
+    return -2 * x * y;
+}
+
+double wynikAnalityczny(double x)
+{
+    return pow(E, -pow(x, 2));
+}
+
+void metodaEulera(double x, double y, double h)
+{
+    std::cout << "wartosc x    y obliczone    y analityczne" << std::endl;
+
+    for (int i = 1; i <= 21; i++)
+    {
+        std::cout << x << "\t\t" << y << "\t\t" << wynikAnalityczny(x) << std::setprecision(4) << std::endl;
+        
+        y = y + (f(x, y) * h);
+        x += h;
+    }
+}
+
+double metodaRungegoKutty(double x, double y, double h)
+{
+
+    double k1, k2, k3, k4;
+    std::cout << "wartosc x    y obliczone    y analityczne" << std::endl;
+    for (int i = 1; i <= 21; i++)
+    {
+        std::cout << x << "\t\t" << y << "\t\t" << wynikAnalityczny(x) << std::setprecision(4) << std::endl;
+        k1 = h * f(x, y);
+        k2 = h * f(x + 0.5 * h, y + 0.5 * k1);
+        k3 = h * f(x + 0.5 * h, y + 0.5 * k2);
+        k4 = h * f(x + 1.0 * h, y + 1.0 * k3);
+        y = y + (1.0 / 6.0) * (k1 + (2.0 * k2) + (2.0 * k3) + k4);
+
+
+        x += h; 
+    }
+    return 0;
+}
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    double y0 = 1;
+    double x0 = 0;
+    double h = 0.1;
+    std::cout << "Metoda Eulera" << std::endl;
+    metodaEulera(x0, y0, h);
+    std::cout << "Metoda Rungego-Kutty" << std::endl;
+    metodaRungegoKutty(x0, y0, h);
+
 }
 
-// Uruchomienie programu: Ctrl + F5 lub menu Debugowanie > Uruchom bez debugowania
-// Debugowanie programu: F5 lub menu Debugowanie > Rozpocznij debugowanie
 
-// Porady dotyczące rozpoczynania pracy:
-//   1. Użyj okna Eksploratora rozwiązań, aby dodać pliki i zarządzać nimi
-//   2. Użyj okna programu Team Explorer, aby nawiązać połączenie z kontrolą źródła
-//   3. Użyj okna Dane wyjściowe, aby sprawdzić dane wyjściowe kompilacji i inne komunikaty
-//   4. Użyj okna Lista błędów, aby zobaczyć błędy
-//   5. Wybierz pozycję Projekt > Dodaj nowy element, aby utworzyć nowe pliki kodu, lub wybierz pozycję Projekt > Dodaj istniejący element, aby dodać istniejące pliku kodu do projektu
-//   6. Aby w przyszłości ponownie otworzyć ten projekt, przejdź do pozycji Plik > Otwórz > Projekt i wybierz plik sln
